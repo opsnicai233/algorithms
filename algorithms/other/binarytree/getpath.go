@@ -2,7 +2,13 @@ package binarytree
 
 const null = -99999999
 
+// 目标：找到二叉树从根节点到叶子节点的某个路径，使得该路径下所有节点和为target
+
 // bug: 收集节点错误
+/*
+试图在不使用二叉树这个数据结构的前提下，直接通过array实现目标
+很难很难！
+*/
 func GoDeep(i, sum, target int, arr []int) (result []int) {
 	n := len(arr)
 	if i < n && arr[i] != null {
