@@ -1,6 +1,8 @@
 package string
 
-import "strconv"
+import (
+	"strconv"
+)
 
 // CountAndSay https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xnpvdm/
 // CountAndSay 性能有待提升
@@ -29,4 +31,20 @@ func count(i int, s string) int {
 		i += 1
 	}
 	return nums
+}
+
+func CountAndSay2(n int) string {
+	return getResult(1, n, "1")
+}
+
+func getResult(i, n int, result string) string {
+	if i == n {
+		return result
+	}
+	s, nums := "", 1
+	for i := 0; i < len(result); i += nums {
+		nums = count(i, result)
+		result += strconv.Itoa(nums) + string(s[i])
+	}
+	return getResult(i+1, n, s)
 }

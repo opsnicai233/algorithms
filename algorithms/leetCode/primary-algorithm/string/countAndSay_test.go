@@ -14,3 +14,8 @@ func TestCountAndSay(t *testing.T) {
 	log.Println(CountAndSay(5))
 	assert.Equal(t, CountAndSay(6), "312211")
 }
+
+func TestCountAndSay2(t *testing.T) {
+	log.Println(CountAndSay(4))
+	assert.Equal(t, CountAndSay(6), "312211")
+}
