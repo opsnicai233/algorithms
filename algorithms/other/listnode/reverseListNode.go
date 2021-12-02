@@ -7,7 +7,7 @@ func ReverseListNode(node *ListNode) *ListNode {
 	curr := node.Next
 	node.Next = nil
 	return reverse(curr, node)
-	//node.Next = nil
+	//return reverse(node.Next, node)
 }
 
 func reverse(curr, prev *ListNode) (head *ListNode) {
