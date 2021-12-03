@@ -51,6 +51,8 @@ func RemoveNthFromEndProMax(head *ListNode, n int) *ListNode {
 		return nil
 	}
 	i, fast, slow := 2, head.Next, head
+
+	// for循环遍历到链表结尾，fast指向最后一个节点，slow指向倒数第n节点
 	for fast.Next != nil {
 		if i >= n {
 			slow = slow.Next
