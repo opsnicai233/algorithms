@@ -79,34 +79,56 @@ func putNodePro(curr1, curr2 *ListNode) (head *ListNode) {
 	return
 }
 
-// MergeTwoLists2 尝试使用 list1、list2 中的节点进行拼接
-// 迭代写法，有bug
-func MergeTwoLists2(list1 *ListNode, list2 *ListNode) *ListNode {
-	var head, result, curr1, curr2 *ListNode
-	if list1.Val < list2.Val {
-		result = list1
+func MergeTwoListsPro2(list1 *ListNode, list2 *ListNode) *ListNode {
+	return putNodeProMax(list1, list2)
+}
+
+func putNodeProMax(curr1, curr2 *ListNode) (head *ListNode) {
+	if curr1 == nil && curr2 == nil {
+		head = nil
+		return
+	}
+	if curr1 == nil {
+		head = curr2
+		return
+	}
+	if curr2 == nil {
+		head = curr1
+		return
+	}
+	if curr1.Val < curr2.Val {
+		head = curr1
+		head.Next = putNodeProMax(head.Next, curr2)
+		//return
 	} else {
-		result = list2
+		head = curr2
+		head.Next = putNodeProMax(curr1, head.Next)
 	}
-	for curr1 != nil || curr2 != nil {
-		if curr1 == nil {
-			head = curr2
-			return result
+	return
+}
+
+// MergeTwoLists2 尝试使用 list1、list2 中的节点进行拼接
+// 迭代写法
+func MergeTwoLists2(list1 *ListNode, list2 *ListNode) *ListNode {
+	var head = &ListNode{-1, nil}
+	result := head
+	for list1 != nil || list2 != nil {
+		if list1 == nil {
+			head.Next = list2
+			break
 		}
-		if curr2 == nil {
-			head = curr1
-			return result
+		if list2 == nil {
+			head.Next = list1
+			break
 		}
-		switch {
-		case curr1.Val < curr2.Val:
-			head = curr1
-			curr1 = head.Next
-			head = head.Next
-		case curr1.Val > curr2.Val:
-			head = curr2
-			curr2 = head.Next
-			head = head.Next
+		if list1.Val < list2.Val {
+			head.Next = list1
+			list1 = list1.Next
+		} else {
+			head.Next = list2
+			list2 = list2.Next
 		}
+		head = head.Next
 	}
-	return result
+	return result.Next
 }
