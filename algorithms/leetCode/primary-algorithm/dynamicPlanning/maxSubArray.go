@@ -1,67 +1,58 @@
 package dynamicPlanning
 
+import "math"
+
 // 最大子序和
 //给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 //子数组 是数组中的一个连续部分。
 
-// error: 算法逻辑有问题
-
-import "math"
-
+// 官方答案
 func MaxSubArray(nums []int) int {
+	sum := nums[0]
+	for i := 1; i < len(nums); i++ {
+		if nums[i-1]+nums[i] > nums[i] {
+			nums[i] += nums[i-1]
+		}
+		if nums[i] > sum {
+			sum = nums[i]
+		}
+	}
+	return sum
+}
+
+func MaxSubArrayPro(nums []int) int {
 	n := len(nums)
-	if n == 0 {
-		return math.MinInt64
+	var dp = make([]int, n)
+	dp[0] = nums[0]
+	sum := nums[0]
+	for i := 1; i < n; i++ {
+		dp[i] = MaxAB(nums[i]+dp[i-1], nums[i])
+		sum = MaxAB(dp[i], sum)
 	}
-	if n == 1 {
-		return nums[0]
-	}
-	leftIndex := 0
-	for i := 0; i < n; i++ {
-		if nums[i] < 0 {
-			leftIndex = i
-			break
-		}
-	}
-	rightIndex := n
-	for i := n - 1; i >= 0; i-- {
-		if nums[i] < 0 {
-			rightIndex = i
-			break
-		}
-	}
-	return fn(nums, leftIndex+1, rightIndex, n)
+	return sum
 }
 
-func fn(nums []int, leftIndex, rightIndex, n int) int {
-	if leftIndex >= rightIndex {
-		return math.MinInt64
-	}
-	leftSum := sumOfArray(nums[:leftIndex+1])
-	rightSum := sumOfArray(nums[rightIndex:])
-
-	li := leftIndex
-	for i := leftIndex; i < n; i++ {
-		if nums[i] < 0 {
-			li = i
-			break
+// 此解法的重点在于若prev对 当前值无增益作用， 则直接更新 prev
+func MaxSubArrayPro2(nums []int) int {
+	prev, ans := nums[0], nums[0]
+	for i := 1; i < len(nums); i++ {
+		if prev > 0 {
+			prev += nums[i]
+		} else {
+			prev = nums[i]
 		}
+		ans = int(math.Max(float64(ans), float64(prev)))
 	}
-	ri := rightIndex
-	for i := rightIndex - 1; i >= 0; i-- {
-		if nums[i] < 0 {
-			ri = i
-			break
-		}
-	}
-	midSum := fn(nums[leftIndex+1:rightIndex], li, ri, rightIndex-leftIndex+1)
-	return MaxAB(MaxAB(leftSum, rightSum), midSum)
+	return ans
 }
 
-func sumOfArray(nums []int) int {
-	sum := 0
-	for _, num := range nums {
-		sum += num
+func MaxSubArrayProMax(nums []int) int {
+	n := len(nums)
+
+	sum, prev := nums[0], nums[0]
+	for i := 1; i < n; i++ {
+		prev = int(math.Max(float64(nums[i]+prev), float64(nums[i])))
+		sum = int(math.Max(float64(prev), float64(sum)))
 	}
 	return sum
 }
